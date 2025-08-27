@@ -1,0 +1,49 @@
+{
+  "name": "Piko Přepadení",
+  "short_name": "Piko Přepadení",
+  "description": "Satirická česká PWA hra o útěku před policií po Praze",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0a192f",
+  "background_color": "#0a192f",
+  "lang": "cs",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJzeXJpbmdlR3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwMGY2ZmYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNhODU1ZjciLz48L2xpbmVhckdyYWRpZW50PjxmaWx0ZXIgaWQ9Im5lb25HbG93Ij48ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI0IiByZXN1bHQ9ImNvbG9yZWRCbHVyIi8+PGZlTWVyZ2U+PGZlTWVyZ2VOb2RlIGluPSJjb2xvcmVkQmx1ciIvPjxmZU1lcmdlTm9kZSBpbj0iU291cmNlR3JhcGhpYyIvPjwvZmVNZXJnZT48L2ZpbHRlcj48L2RlZnM+PHJlY3Qgd2lkdGg9IjE5MiIgaGVpZ2h0PSIxOTIiIGZpbGw9IiMwYTE5MmYiIHJ4PSIyNCIvPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQ4LCA0OCkiPjxwYXRoIGQ9Ik00OCA4TDggOEw4IDQ4TDEyIDQ4TDEyIDQ0TDQ0IDQ0TDQ0IDEyTDQ4IDEyTDQ4IDhaTTE2IDEyTDE2IDQwTDQwIDQwTDQwIDEyTDE2IDEyWiIgZmlsbD0idXJsKCNzeXJpbmdlR3JhZGllbnQpIiBmaWx0ZXI9InVybCgjbmVvbkdsb3cpIi8+PHJlY3QgeD0iMjAiIHk9IjE2IiB3aWR0aD0iMTYiIGhlaWdodD0iNCIgZmlsbD0idXJsKCNzeXJpbmdlR3JhZGllbnQpIiBmaWx0ZXI9InVybCgjbmVvbkdsb3cpIi8+PC9nPjwvc3ZnPgo=",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJzeXJpbmdlR3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwMGY2ZmYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNhODU1ZjciLz48L2xpbmVhckdyYWRpZW50PjxmaWx0ZXIgaWQ9Im5lb25HbG93Ij48ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI4IiByZXN1bHQ9ImNvbG9yZWRCbHVyIi8+PGZlTWVyZ2U+PGZlTWVyZ2VOb2RlIGluPSJjb2xvcmVkQmx1ciIvPjxmZU1lcmdlTm9kZSBpbj0iU291cmNlR3JhcGhpYyIvPjwvZmVNZXJnZT48L2ZpbHRlcj48L2RlZnM+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIGZpbGw9IiMwYTE5MmYiIHJ4PSI2NCIvPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEyOCwgMTI4KSI+PHBhdGggZD0iTTEyOCAyMUwyMSAyMUwyMSAxMjhMMzIgMTI4TDMyIDExN0wxMTcgMTE3TDExNyAzMkwxMjggMzJMMTI4IDIxWk00MiAzMkw0MiAxMDdMMTA3IDEwN0wxMDcgMzJMNDIgMzJaIiBmaWxsPSJ1cmwoI3N5cmluZ2VHcmFkaWVudCkiIGZpbHRlcj0idXJsKCNuZW9uR2xvdykiLz48cmVjdCB4PSI1MyIgeT0iNDMiIHdpZHRoPSI0MyIgaGVpZ2h0PSIxMSIgZmlsbD0idXJsKCNzeXJpbmdlR3JhZGllbnQpIiBmaWx0ZXI9InVybCgjbmVvbkdsb3cpIi8+PC9nPjwvc3ZnPgo=",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "entertainment"],
+  "screenshots": [
+    {
+      "src": "image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzkwIiBoZWlnaHQ9Ijg0NCIgdmlld0JveD0iMCAwIDM5MCA4NDQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjM5MCIgaGVpZ2h0PSI4NDQiIGZpbGw9InVybChsaW5lYXJHcmFkaWVudCkiLz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImxpbmVhckdyYWRpZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMGExOTJmIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMWUyOTNiIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PC9zdmc+",
+      "sizes": "390x844",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nová hra",
+      "short_name": "Hrát",
+      "description": "Začít novou hru",
+      "url": "./?action=play",
+      "icons": [
+        {
+          "src": "image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIGZpbGw9IiMwYTE5MmYiIHJ4PSIxMiIvPjxwYXRoIGQ9Ik0zNiAyNEwyNCAyNEwyNCA3MkwzNiA3MkwzNiA2MEw2MCA2MEw2MCAzNkwzNiAzNkwzNiAyNFpNNDggMzZMNDggNDhMNDggNDhaIiBmaWxsPSIjMDBmNmZmIi8+PC9zdmc+",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}

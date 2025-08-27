@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Piko Přepadení">
+    <meta name="theme-color" content="#0a192f">
+    <title>Piko Přepadení - PWA Hra</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/x-icon" href="image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSIjMGExOTJmIiByeD0iNCIvPgo8cGF0aCBkPSJNOCAyTDQgMkw0IDhMNiA4TDYgNkwyNiA2TDI2IDE0TDI4IDE0TDI4IDJMOCAyWk0xMCA0TDEwIDEwTDI0IDEwTDI0IDRMMTAgNFoiIGZpbGw9IiMwMGY2ZmYiLz4KPHN2Zz4K">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="screen active">
+        <div class="glass-panel loading-panel">
+            <div class="neon-icon">💉</div>
+            <h1 class="neon-text">Piko Přepadení</h1>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <p class="loading-text">Načítá se...</p>
+        </div>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="screen">
+        <div class="glass-container">
+            <div class="glass-panel main-panel">
+                <div class="neon-icon">🏃‍♂️</div>
+                <h1 class="game-title neon-text">Piko Přepadení</h1>
+                <p class="game-subtitle">Útěk před fízly po Praze</p>
+                
+                <div class="menu-buttons">
+                    <button id="play-btn" class="neon-button primary-btn">
+                        <span class="btn-icon">▶️</span>
+                        <span class="btn-text">Hrát</span>
+                    </button>
+                    
+                    <button id="scores-btn" class="neon-button secondary-btn">
+                        <span class="btn-icon">🏆</span>
+                        <span class="btn-text">Skóre</span>
+                    </button>
+                    
+                    <button id="achievements-btn" class="neon-button secondary-btn">
+                        <span class="btn-icon">🎖️</span>
+                        <span class="btn-text">Achievementy</span>
+                    </button>
+                    
+                    <button id="settings-btn" class="neon-button secondary-btn">
+                        <span class="btn-icon">⚙️</span>
+                        <span class="btn-text">Nastavení</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+        <!-- Game HUD -->
+        <div class="game-hud">
+            <div class="hud-top">
+                <div class="hud-item glass-panel">
+                    <span class="hud-label">Skóre</span>
+                    <span id="score-display" class="hud-value neon-text">0</span>
+                </div>
+                <div class="hud-item glass-panel">
+                    <span class="hud-label">Vzdálenost</span>
+                    <span id="distance-display" class="hud-value neon-text">0m</span>
+                </div>
+            </div>
+            
+            <div class="hud-bottom">
+                <div class="health-bar glass-panel">
+                    <span class="hud-label">Zdraví</span>
+                    <div class="health-fill">
+                        <div id="health-progress" class="health-progress"></div>
+                    </div>
+                </div>
+                
+                <div id="powerup-display" class="powerup-display glass-panel">
+                    <!-- Power-ups will be dynamically added here -->
+                </div>
+            </div>
+            
+            <button id="pause-btn" class="pause-btn neon-button">⏸️</button>
+        </div>
+
+        <!-- Game Canvas -->
+        <canvas id="game-canvas" width="390" height="844"></canvas>
+        
+        <!-- Game Messages -->
+        <div id="game-message" class="game-message glass-panel">
+            <span id="message-text" class="neon-text"></span>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameover-screen" class="screen">
+        <div class="glass-container">
+            <div class="glass-panel result-panel">
+                <div class="result-icon">💀</div>
+                <h2 class="result-title neon-text">Konec hry!</h2>
+                <p id="gameover-quote" class="result-quote">Chytli tě, šlehaři!</p>
+                
+                <div class="result-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Finální skóre:</span>
+                        <span id="final-score" class="stat-value neon-text">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Vzdálenost:</span>
+                        <span id="final-distance" class="stat-value neon-text">0m</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Čas přežití:</span>
+                        <span id="final-time" class="stat-value neon-text">0s</span>
+                    </div>
+                </div>
+                
+                <div class="menu-buttons">
+                    <button id="restart-btn" class="neon-button primary-btn">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Znovu</span>
+                    </button>
+                    
+                    <button id="menu-btn" class="neon-button secondary-btn">
+                        <span class="btn-icon">🏠</span>
+                        <span class="btn-text">Menu</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Screen -->
+    <div id="settings-screen" class="screen">
+        <div class="glass-container">
+            <div class="glass-panel settings-panel">
+                <h2 class="panel-title neon-text">Nastavení</h2>
+                
+                <div class="settings-group">
+                    <div class="setting-item">
+                        <label for="sound-toggle" class="setting-label">Zvuk</label>
+                        <input type="checkbox" id="sound-toggle" class="setting-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="vibration-toggle" class="setting-label">Vibrace</label>
+                        <input type="checkbox" id="vibration-toggle" class="setting-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="difficulty-select" class="setting-label">Obtížnost</label>
+                        <select id="difficulty-select" class="setting-select">
+                            <option value="easy">Lehká</option>
+                            <option value="normal" selected>Normální</option>
+                            <option value="hard">Těžká</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-actions">
+                    <button id="reset-data-btn" class="neon-button danger-btn">
+                        <span class="btn-icon">🗑️</span>
+                        <span class="btn-text">Resetovat data</span>
+                    </button>
+                </div>
+                
+                <button id="back-from-settings-btn" class="neon-button secondary-btn back-btn">
+                    <span class="btn-icon">⬅️</span>
+                    <span class="btn-text">Zpět</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- High Scores Screen -->
+    <div id="scores-screen" class="screen">
+        <div class="glass-container">
+            <div class="glass-panel scores-panel">
+                <h2 class="panel-title neon-text">Nejlepší skóre</h2>
+                
+                <div id="scores-list" class="scores-list">
+                    <!-- High scores will be dynamically populated -->
+                </div>
+                
+                <button id="back-from-scores-btn" class="neon-button secondary-btn back-btn">
+                    <span class="btn-icon">⬅️</span>
+                    <span class="btn-text">Zpět</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements Screen -->
+    <div id="achievements-screen" class="screen">
+        <div class="glass-container">
+            <div class="glass-panel achievements-panel">
+                <h2 class="panel-title neon-text">Achievementy</h2>
+                
+                <div id="achievements-list" class="achievements-list">
+                    <!-- Achievements will be dynamically populated -->
+                </div>
+                
+                <button id="back-from-achievements-btn" class="neon-button secondary-btn back-btn">
+                    <span class="btn-icon">⬅️</span>
+                    <span class="btn-text">Zpět</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pause Screen -->
+    <div id="pause-screen" class="screen overlay-screen">
+        <div class="glass-container">
+            <div class="glass-panel pause-panel">
+                <h2 class="panel-title neon-text">Pauza</h2>
+                
+                <div class="menu-buttons">
+                    <button id="resume-btn" class="neon-button primary-btn">
+                        <span class="btn-icon">▶️</span>
+                        <span class="btn-text">Pokračovat</span>
+                    </button>
+                    
+                    <button id="pause-menu-btn" class="neon-button secondary-btn">
+                        <span class="btn-icon">🏠</span>
+                        <span class="btn-text">Hlavní menu</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
