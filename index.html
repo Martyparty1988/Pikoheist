@@ -3,243 +3,1824 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="theme-color" content="#1a1a2e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Piko Přepadení">
-    <meta name="theme-color" content="#0a192f">
-    <title>Piko Přepadení - PWA Hra</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/x-icon" href="image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSIjMGExOTJmIiByeD0iNCIvPgo8cGF0aCBkPSJNOCAyTDQgMkw0IDhMNiA4TDYgNkwyNiA2TDI2IDE0TDI4IDE0TDI4IDJMOCAyWk0xMCA0TDEwIDEwTDI0IDEwTDI0IDRMMTAgNFoiIGZpbGw9IiMwMGY2ZmYiLz4KPHN2Zz4K">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Fofr Pedro - Pražský Endless Runner</title>
+    
+    <!-- PWA Manifest (inline) -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiRm9mciBQZWRybyIsInNob3J0X25hbWUiOiJGb2ZyUGVkcm8iLCJzdGFydF91cmwiOiIuLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMxYTFhMmUiLCJ0aGVtZV9jb2xvciI6IiMxYTFhMmUiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNGJXeHVjejBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01DOXpkbWNpSUhacFpYZENiM2c5SWpBZ01DQXhNakFnTVRJd0lpQm1hV3hzUFNJak1UbGhNVEZoTXpVaVBnbzhjbVZqZENCM2FXUjBhRDBpTVRJd0lpQm9aV2xuYUhROUlqRXlNQ0lpSUdacGJHdzlJaU14TlRoaU1UTmhOVFFpTHo0S1BIUmxlSFFnZUQwaU5qQWlJSGs5SWpZd0lpQm1hV3hzUFNJalptWm1JaUJtYjI1ME9ITnBlbVU5SWpJd0lpQjBlWFIwTFdGdVkyaHZjajBpYldsa1pHeGxJajVHYjJaeVBDOTBaWGgwUGdvOEwzTjJaejRLIiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifV19">
+    
+    <!-- Three.js - Opravený CDN link -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.179.1/three.module.min.js" type="module"></script>
+    <script>
+        // Fallback pro starší browsery
+        if (!window.THREE) {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.179.1/three.min.js"><\/script>');
+        }
+    </script>
+    
+    <style>
+        :root {
+            /* Moderní color palette 2025 */
+            --color-bg-primary: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            --color-bg-secondary: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            --color-glass: rgba(255, 255, 255, 0.08);
+            --color-glass-border: rgba(255, 255, 255, 0.12);
+            --color-accent: #64ffda;
+            --color-accent-secondary: #7c4dff;
+            --color-text: #e1e5e9;
+            --color-text-muted: #9ca3af;
+            --color-success: #4ade80;
+            --color-warning: #fbbf24;
+            --color-error: #f87171;
+            
+            /* Shadows and effects */
+            --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.37);
+            --shadow-float: 0 20px 60px rgba(0, 0, 0, 0.5);
+            --blur-glass: blur(16px);
+            --border-radius: 20px;
+            --border-radius-sm: 12px;
+            
+            /* Safe area for iPhone 15 Pro */
+            --safe-area-top: env(safe-area-inset-top, 44px);
+            --safe-area-bottom: env(safe-area-inset-bottom, 34px);
+            --safe-area-left: env(safe-area-inset-left, 0px);
+            --safe-area-right: env(safe-area-inset-right, 0px);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+            background: var(--color-bg-primary);
+            color: var(--color-text);
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+        }
+        
+        /* Glassmorphism základní třída */
+        .glass {
+            background: var(--color-glass);
+            backdrop-filter: var(--blur-glass);
+            -webkit-backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--color-glass-border);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-glass);
+        }
+        
+        /* Age warning overlay */
+        .age-warning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+        
+        .age-warning__content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+        
+        .age-warning h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--color-accent), var(--color-accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .age-warning p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 24px;
+            opacity: 0.8;
+        }
+        
+        /* Modern button system */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 44px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn--primary {
+            background: linear-gradient(135deg, var(--color-accent), var(--color-accent-secondary));
+            color: #000;
+            box-shadow: 0 4px 20px rgba(100, 255, 218, 0.3);
+        }
+        
+        .btn--primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(100, 255, 218, 0.4);
+        }
+        
+        .btn--secondary {
+            background: var(--color-glass);
+            backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--color-glass-border);
+            color: var(--color-text);
+        }
+        
+        .btn--secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-1px);
+        }
+        
+        .btn--lg {
+            padding: 16px 32px;
+            font-size: 18px;
+            min-height: 56px;
+        }
+        
+        .btn--full-width {
+            width: 100%;
+        }
+        
+        /* Main menu */
+        .main-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--safe-area-top) var(--safe-area-right) var(--safe-area-bottom) var(--safe-area-left);
+            z-index: 1000;
+        }
+        
+        .main-menu__container {
+            width: 100%;
+            max-width: 400px;
+            padding: 0 20px;
+        }
+        
+        .main-menu__header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .main-menu__title {
+            font-size: clamp(32px, 8vw, 48px);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-secondary) 50%, #ff6b9d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+        
+        .main-menu__subtitle {
+            font-size: 16px;
+            opacity: 0.7;
+            font-weight: 400;
+        }
+        
+        .main-menu__actions > * {
+            margin-bottom: 16px;
+        }
+        
+        .main-menu__footer {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        /* Game canvas */
+        #game-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+        
+        /* HUD */
+        .hud {
+            position: fixed;
+            top: var(--safe-area-top);
+            left: var(--safe-area-left);
+            right: var(--safe-area-right);
+            z-index: 100;
+            padding: 20px;
+            pointer-events: none;
+        }
+        
+        .hud__top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .hud__score {
+            background: var(--color-glass);
+            backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--color-glass-border);
+            border-radius: var(--border-radius-sm);
+            padding: 12px 16px;
+            font-size: 18px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .hud__powerup {
+            background: var(--color-glass);
+            backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--color-glass-border);
+            border-radius: var(--border-radius-sm);
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+        }
+        
+        .hud__powerup-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        .hud__powerup-timer {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .hud__powerup-progress {
+            height: 100%;
+            background: var(--color-accent);
+            border-radius: 2px;
+            transition: width 0.1s linear;
+        }
+        
+        /* Touch controls */
+        .touch-controls {
+            position: fixed;
+            bottom: calc(var(--safe-area-bottom) + 20px);
+            left: var(--safe-area-left);
+            right: var(--safe-area-right);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 100;
+            pointer-events: none;
+        }
+        
+        .touch-controls.visible {
+            pointer-events: auto;
+        }
+        
+        .control-group {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .control-btn {
+            width: 56px;
+            height: 56px;
+            background: var(--color-glass);
+            backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--color-glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--color-text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        
+        .control-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Settings panel */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: var(--safe-area-top) var(--safe-area-right) var(--safe-area-bottom) var(--safe-area-left);
+        }
+        
+        .settings-content {
+            background: var(--color-glass);
+            backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--color-glass-border);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .settings-item {
+            margin-bottom: 24px;
+        }
+        
+        .settings-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .settings-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius-sm);
+            color: var(--color-text);
+            font-size: 16px;
+        }
+        
+        /* Game over screen */
+        .game-over {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1500;
+            padding: var(--safe-area-top) var(--safe-area-right) var(--safe-area-bottom) var(--safe-area-left);
+        }
+        
+        .game-over__content {
+            background: var(--color-glass);
+            backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--color-glass-border);
+            border-radius: var(--border-radius);
+            padding: 40px 30px;
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .game-over__title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--color-error) 0%, #ff6b9d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .game-over__stats {
+            margin: 24px 0;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+        
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            top: calc(var(--safe-area-top) + 80px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--color-glass);
+            backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--color-glass-border);
+            border-radius: var(--border-radius-sm);
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 3000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            max-width: calc(100vw - 40px);
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(10px);
+        }
+        
+        /* Debug overlay */
+        .debug-overlay {
+            position: fixed;
+            top: var(--safe-area-top);
+            right: var(--safe-area-right);
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            padding: 10px;
+            border-radius: var(--border-radius-sm);
+            z-index: 4000;
+            display: none;
+            max-width: 200px;
+        }
+        
+        .debug-line {
+            margin-bottom: 4px;
+        }
+        
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Hide elements when playing */
+        .game-playing .main-menu,
+        .game-playing .settings-panel {
+            display: none;
+        }
+        
+        .game-playing .touch-controls.visible {
+            display: flex;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .main-menu__container {
+                padding: 0 16px;
+            }
+            
+            .hud {
+                padding: 16px;
+            }
+            
+            .touch-controls {
+                padding: 0 16px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen" class="screen active">
-        <div class="glass-panel loading-panel">
-            <div class="neon-icon">💉</div>
-            <h1 class="neon-text">Piko Přepadení</h1>
-            <div class="loading-bar">
-                <div class="loading-progress"></div>
-            </div>
-            <p class="loading-text">Načítá se...</p>
+    <!-- Age Rating Warning -->
+    <div id="age-warning" class="age-warning">
+        <div class="age-warning__content">
+            <h2>16+ satirický obsah</h2>
+            <p>Tato hra obsahuje satirický černý humor bez glorifikace nelegálních aktivit.</p>
+            <button id="age-confirm-btn" class="btn btn--primary">Rozumím a chci pokračovat</button>
         </div>
     </div>
 
-    <!-- Start Screen -->
-    <div id="start-screen" class="screen">
-        <div class="glass-container">
-            <div class="glass-panel main-panel">
-                <div class="neon-icon">🏃‍♂️</div>
-                <h1 class="game-title neon-text">Piko Přepadení</h1>
-                <p class="game-subtitle">Útěk před fízly po Praze</p>
-                
-                <div class="menu-buttons">
-                    <button id="play-btn" class="neon-button primary-btn">
-                        <span class="btn-icon">▶️</span>
-                        <span class="btn-text">Hrát</span>
-                    </button>
-                    
-                    <button id="scores-btn" class="neon-button secondary-btn">
-                        <span class="btn-icon">🏆</span>
-                        <span class="btn-text">Skóre</span>
-                    </button>
-                    
-                    <button id="achievements-btn" class="neon-button secondary-btn">
-                        <span class="btn-icon">🎖️</span>
-                        <span class="btn-text">Achievementy</span>
-                    </button>
-                    
-                    <button id="settings-btn" class="neon-button secondary-btn">
-                        <span class="btn-icon">⚙️</span>
-                        <span class="btn-text">Nastavení</span>
-                    </button>
-                </div>
+    <!-- Main Menu -->
+    <div id="main-menu" class="main-menu">
+        <div class="main-menu__container">
+            <div class="main-menu__header">
+                <h1 class="main-menu__title">Fofr Pedro</h1>
+                <p class="main-menu__subtitle">Pražský Endless Runner</p>
+            </div>
+            
+            <div class="main-menu__actions">
+                <button id="start-game" class="btn btn--primary btn--lg btn--full-width">Začít hru</button>
+                <button id="show-settings" class="btn btn--secondary btn--lg btn--full-width">Nastavení</button>
+                <button id="show-leaderboard" class="btn btn--secondary btn--lg btn--full-width">Žebříček</button>
+                <button id="show-achievements" class="btn btn--secondary btn--lg btn--full-width">Úspěchy</button>
+            </div>
+
+            <div class="main-menu__footer">
+                <button id="daily-challenge" class="btn btn--secondary">Denní výzva</button>
+                <button id="export-data" class="btn btn--secondary">Export dat</button>
             </div>
         </div>
     </div>
 
-    <!-- Game Screen -->
-    <div id="game-screen" class="screen">
-        <!-- Game HUD -->
-        <div class="game-hud">
-            <div class="hud-top">
-                <div class="hud-item glass-panel">
-                    <span class="hud-label">Skóre</span>
-                    <span id="score-display" class="hud-value neon-text">0</span>
-                </div>
-                <div class="hud-item glass-panel">
-                    <span class="hud-label">Vzdálenost</span>
-                    <span id="distance-display" class="hud-value neon-text">0m</span>
-                </div>
-            </div>
-            
-            <div class="hud-bottom">
-                <div class="health-bar glass-panel">
-                    <span class="hud-label">Zdraví</span>
-                    <div class="health-fill">
-                        <div id="health-progress" class="health-progress"></div>
-                    </div>
-                </div>
-                
-                <div id="powerup-display" class="powerup-display glass-panel">
-                    <!-- Power-ups will be dynamically added here -->
-                </div>
-            </div>
-            
-            <button id="pause-btn" class="pause-btn neon-button">⏸️</button>
-        </div>
+    <!-- Game Canvas -->
+    <canvas id="game-canvas"></canvas>
 
-        <!-- Game Canvas -->
-        <canvas id="game-canvas" width="390" height="844"></canvas>
-        
-        <!-- Game Messages -->
-        <div id="game-message" class="game-message glass-panel">
-            <span id="message-text" class="neon-text"></span>
+    <!-- HUD -->
+    <div id="hud" class="hud">
+        <div class="hud__top">
+            <div id="hud-score" class="hud__score">0 m</div>
+            <div id="hud-powerup" class="hud__powerup" style="display: none;">
+                <div id="powerup-icon" class="hud__powerup-icon">⚡</div>
+                <div class="hud__powerup-timer">
+                    <div id="powerup-progress" class="hud__powerup-progress" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Touch Controls -->
+    <div id="touch-controls" class="touch-controls">
+        <div class="control-group">
+            <div class="control-btn" id="btn-left" data-action="left">←</div>
+        </div>
+        <div class="control-group">
+            <div class="control-btn" id="btn-up" data-action="jump">↑</div>
+            <div class="control-btn" id="btn-down" data-action="slide">↓</div>
+        </div>
+        <div class="control-group">
+            <div class="control-btn" id="btn-right" data-action="right">→</div>
+        </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div id="settings-panel" class="settings-panel">
+        <div class="settings-content">
+            <h2 style="margin-bottom: 24px; text-align: center;">Nastavení</h2>
+            
+            <div class="settings-item">
+                <label class="settings-label">Téma</label>
+                <select id="setting-theme" class="settings-select">
+                    <option value="auto">Automatické</option>
+                    <option value="day">Den</option>
+                    <option value="night">Noc</option>
+                </select>
+            </div>
+            
+            <div class="settings-item">
+                <label class="settings-label">Ostrost humoru</label>
+                <select id="setting-spice" class="settings-select">
+                    <option value="mild">Mírná</option>
+                    <option value="spicy">Ostrá</option>
+                </select>
+            </div>
+            
+            <div class="settings-item">
+                <label class="settings-label">Zvuk</label>
+                <select id="setting-sound" class="settings-select">
+                    <option value="true">Zapnuto</option>
+                    <option value="false">Vypnuto</option>
+                </select>
+            </div>
+            
+            <div class="settings-item">
+                <label class="settings-label">Ovládání</label>
+                <select id="setting-controls" class="settings-select">
+                    <option value="touch">Pouze dotyky</option>
+                    <option value="buttons">Tlačítka + dotyky</option>
+                </select>
+            </div>
+            
+            <div style="margin-top: 32px;">
+                <button id="save-settings" class="btn btn--primary btn--full-width">Uložit nastavení</button>
+                <button id="close-settings" class="btn btn--secondary btn--full-width" style="margin-top: 12px;">Zavřít</button>
+            </div>
         </div>
     </div>
 
     <!-- Game Over Screen -->
-    <div id="gameover-screen" class="screen">
-        <div class="glass-container">
-            <div class="glass-panel result-panel">
-                <div class="result-icon">💀</div>
-                <h2 class="result-title neon-text">Konec hry!</h2>
-                <p id="gameover-quote" class="result-quote">Chytli tě, šlehaři!</p>
-                
-                <div class="result-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">Finální skóre:</span>
-                        <span id="final-score" class="stat-value neon-text">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Vzdálenost:</span>
-                        <span id="final-distance" class="stat-value neon-text">0m</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Čas přežití:</span>
-                        <span id="final-time" class="stat-value neon-text">0s</span>
-                    </div>
+    <div id="game-over" class="game-over">
+        <div class="game-over__content">
+            <h2 class="game-over__title">Konec hry!</h2>
+            <div id="game-over-message" style="margin-bottom: 16px; opacity: 0.8;"></div>
+            
+            <div class="game-over__stats">
+                <div class="stat-item">
+                    <span>Skóre:</span>
+                    <span id="final-score" class="stat-value">0</span>
                 </div>
+                <div class="stat-item">
+                    <span>Vzdálenost:</span>
+                    <span id="final-distance" class="stat-value">0 m</span>
+                </div>
+                <div class="stat-item">
+                    <span>Nejlepší:</span>
+                    <span id="best-score" class="stat-value">0</span>
+                </div>
+            </div>
+            
+            <input id="player-name" type="text" placeholder="Zadej své jméno..." 
+                   style="width: 100%; padding: 12px; margin-bottom: 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white;">
+            
+            <button id="restart-game" class="btn btn--primary btn--full-width">Hrát znovu</button>
+            <button id="back-to-menu" class="btn btn--secondary btn--full-width" style="margin-top: 12px;">Hlavní menu</button>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Debug Overlay -->
+    <div id="debug-overlay" class="debug-overlay">
+        <div class="debug-line">FPS: <span id="debug-fps">60</span></div>
+        <div class="debug-line">Speed: <span id="debug-speed">0</span></div>
+        <div class="debug-line">Lane: <span id="debug-lane">1</span></div>
+        <div class="debug-line">State: <span id="debug-state">menu</span></div>
+    </div>
+
+    <script type="module">
+        // Fofr Pedro - Kompletní 3D PWA Endless Runner
+        // Verze 2.0 s opravenými CDN linky a moderním designem
+        
+        class FofrPedroGame {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.player = null;
+                this.gameState = 'menu';
+                this.isPlaying = false;
+                this.isPaused = false;
                 
-                <div class="menu-buttons">
-                    <button id="restart-btn" class="neon-button primary-btn">
-                        <span class="btn-icon">🔄</span>
-                        <span class="btn-text">Znovu</span>
-                    </button>
+                // Game configuration
+                this.config = {
+                    lanes: 3,
+                    startSpeed: 8,
+                    maxSpeed: 25,
+                    speedIncrease: 0.02,
+                    gravityStrength: 15,
+                    jumpHeight: 2.5,
+                    flipHeight: 3.375,
+                    slideTime: 800,
+                    flipCooldown: 900,
+                    coyoteTime: 120,
+                    doubleSwipeWindow: 250
+                };
+                
+                // Game state
+                this.currentLane = 1;
+                this.currentSpeed = this.config.startSpeed;
+                this.score = 0;
+                this.distance = 0;
+                this.lives = 3;
+                this.isJumping = false;
+                this.isSliding = false;
+                this.isFlipping = false;
+                this.flipCooldownTime = 0;
+                this.lastGroundTime = 0;
+                this.playerY = 0;
+                this.playerVelocityY = 0;
+                
+                // Touch controls
+                this.touches = [];
+                this.lastSwipeTime = 0;
+                this.swipeCount = 0;
+                this.lastSwipeDirection = null;
+                
+                // Performance monitoring
+                this.fps = 60;
+                this.frameCount = 0;
+                this.lastFpsUpdate = 0;
+                this.lowPowerMode = false;
+                
+                // Game objects
+                this.obstacles = [];
+                this.powerUps = [];
+                this.activePowerUps = [];
+                
+                // Data and settings
+                this.gameData = this.loadGameData();
+                this.settings = this.gameData.settings;
+                
+                // Audio
+                this.audioContext = null;
+                this.soundEnabled = false;
+                
+                // Czech voice lines
+                this.voiceLines = {
+                    mild: [
+                        "Motá se fízl na ocase, přidej!",
+                        "Brčko na cestě, drž lajnu!",
+                        "Sáček ve větru – změň pruh!",
+                        "Karta píchá, skluzem to obejdi!",
+                        "Injekce před tebou – přeskoč!",
+                        "Neviditelnej? Tak dělej!",
+                        "Holubi na tripu – uhni!",
+                        "Majáky v zrcátku, běž!"
+                    ],
+                    spicy: [
+                        "Motá se fízl na ocase, přidej do toho!",
+                        "Brčko na cestě, drž lajnu nebo skončíš!",
+                        "Sáček ve větru – změň pruh, než tě zabalí!",
+                        "Karta píchá, skluzem to obejdi nebo se řízni!",
+                        "Injekce před tebou – přeskoč a žij!",
+                        "Neviditelnej? Tak dělej, než to vyprchá!",
+                        "Holubi na tripu – fyziku nevyučuj, uhni!",
+                        "Majáky v zrcátku. Mrtvý brouk? Radši běž!"
+                    ]
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupDOM();
+                this.setupEventListeners();
+                this.checkDebugMode();
+                this.registerServiceWorker();
+                
+                // Show age warning first
+                document.getElementById('age-warning').style.display = 'flex';
+            }
+            
+            setupDOM() {
+                // DOM elements
+                this.canvas = document.getElementById('game-canvas');
+                this.hudScore = document.getElementById('hud-score');
+                this.hudPowerup = document.getElementById('hud-powerup');
+                this.touchControls = document.getElementById('touch-controls');
+                this.gameOverScreen = document.getElementById('game-over');
+                this.settingsPanel = document.getElementById('settings-panel');
+                this.toast = document.getElementById('toast');
+                this.debugOverlay = document.getElementById('debug-overlay');
+            }
+            
+            setupEventListeners() {
+                // Age confirmation
+                document.getElementById('age-confirm-btn').addEventListener('click', () => {
+                    document.getElementById('age-warning').style.display = 'none';
+                    this.initAudio();
+                });
+                
+                // Menu buttons
+                document.getElementById('start-game').addEventListener('click', () => this.startGame());
+                document.getElementById('show-settings').addEventListener('click', () => this.showSettings());
+                document.getElementById('close-settings').addEventListener('click', () => this.hideSettings());
+                document.getElementById('save-settings').addEventListener('click', () => this.saveSettings());
+                
+                // Game over buttons
+                document.getElementById('restart-game').addEventListener('click', () => this.restartGame());
+                document.getElementById('back-to-menu').addEventListener('click', () => this.backToMenu());
+                
+                // Touch controls
+                this.setupTouchControls();
+                
+                // Keyboard controls (fallback)
+                document.addEventListener('keydown', (e) => this.handleKeyboard(e));
+                
+                // Visibility changes
+                document.addEventListener('visibilitychange', () => this.handleVisibilityChange());
+                
+                // Window resize
+                window.addEventListener('resize', () => this.handleResize());
+            }
+            
+            setupTouchControls() {
+                // Touch gesture detection
+                let touchStartX = 0;
+                let touchStartY = 0;
+                let touchStartTime = 0;
+                
+                this.canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    if (!this.isPlaying) return;
                     
-                    <button id="menu-btn" class="neon-button secondary-btn">
-                        <span class="btn-icon">🏠</span>
-                        <span class="btn-text">Menu</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Settings Screen -->
-    <div id="settings-screen" class="screen">
-        <div class="glass-container">
-            <div class="glass-panel settings-panel">
-                <h2 class="panel-title neon-text">Nastavení</h2>
+                    const touch = e.touches[0];
+                    touchStartX = touch.clientX;
+                    touchStartY = touch.clientY;
+                    touchStartTime = Date.now();
+                });
                 
-                <div class="settings-group">
-                    <div class="setting-item">
-                        <label for="sound-toggle" class="setting-label">Zvuk</label>
-                        <input type="checkbox" id="sound-toggle" class="setting-toggle" checked>
-                        <span class="toggle-slider"></span>
-                    </div>
+                this.canvas.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    if (!this.isPlaying) return;
                     
-                    <div class="setting-item">
-                        <label for="vibration-toggle" class="setting-label">Vibrace</label>
-                        <input type="checkbox" id="vibration-toggle" class="setting-toggle" checked>
-                        <span class="toggle-slider"></span>
-                    </div>
+                    const touch = e.changedTouches[0];
+                    const deltaX = touch.clientX - touchStartX;
+                    const deltaY = touch.clientY - touchStartY;
+                    const deltaTime = Date.now() - touchStartTime;
                     
-                    <div class="setting-item">
-                        <label for="difficulty-select" class="setting-label">Obtížnost</label>
-                        <select id="difficulty-select" class="setting-select">
-                            <option value="easy">Lehká</option>
-                            <option value="normal" selected>Normální</option>
-                            <option value="hard">Těžká</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="settings-actions">
-                    <button id="reset-data-btn" class="neon-button danger-btn">
-                        <span class="btn-icon">🗑️</span>
-                        <span class="btn-text">Resetovat data</span>
-                    </button>
-                </div>
-                
-                <button id="back-from-settings-btn" class="neon-button secondary-btn back-btn">
-                    <span class="btn-icon">⬅️</span>
-                    <span class="btn-text">Zpět</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- High Scores Screen -->
-    <div id="scores-screen" class="screen">
-        <div class="glass-container">
-            <div class="glass-panel scores-panel">
-                <h2 class="panel-title neon-text">Nejlepší skóre</h2>
-                
-                <div id="scores-list" class="scores-list">
-                    <!-- High scores will be dynamically populated -->
-                </div>
-                
-                <button id="back-from-scores-btn" class="neon-button secondary-btn back-btn">
-                    <span class="btn-icon">⬅️</span>
-                    <span class="btn-text">Zpět</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Achievements Screen -->
-    <div id="achievements-screen" class="screen">
-        <div class="glass-container">
-            <div class="glass-panel achievements-panel">
-                <h2 class="panel-title neon-text">Achievementy</h2>
-                
-                <div id="achievements-list" class="achievements-list">
-                    <!-- Achievements will be dynamically populated -->
-                </div>
-                
-                <button id="back-from-achievements-btn" class="neon-button secondary-btn back-btn">
-                    <span class="btn-icon">⬅️</span>
-                    <span class="btn-text">Zpět</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pause Screen -->
-    <div id="pause-screen" class="screen overlay-screen">
-        <div class="glass-container">
-            <div class="glass-panel pause-panel">
-                <h2 class="panel-title neon-text">Pauza</h2>
-                
-                <div class="menu-buttons">
-                    <button id="resume-btn" class="neon-button primary-btn">
-                        <span class="btn-icon">▶️</span>
-                        <span class="btn-text">Pokračovat</span>
-                    </button>
+                    // Minimum distance for swipe
+                    const minDistance = 50;
+                    const maxTime = 500;
                     
-                    <button id="pause-menu-btn" class="neon-button secondary-btn">
-                        <span class="btn-icon">🏠</span>
-                        <span class="btn-text">Hlavní menu</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
+                    if (deltaTime > maxTime) return;
+                    
+                    const absX = Math.abs(deltaX);
+                    const absY = Math.abs(deltaY);
+                    
+                    if (absX > minDistance || absY > minDistance) {
+                        if (absX > absY) {
+                            // Horizontal swipe
+                            if (deltaX > 0) {
+                                this.handleAction('right');
+                            } else {
+                                this.handleAction('left');
+                            }
+                        } else {
+                            // Vertical swipe
+                            if (deltaY < 0) {
+                                // Swipe up
+                                this.handleSwipeUp();
+                            } else {
+                                // Swipe down
+                                this.handleAction('slide');
+                            }
+                        }
+                    }
+                });
+                
+                // Button controls
+                document.querySelectorAll('.control-btn').forEach(btn => {
+                    btn.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        const action = btn.dataset.action;
+                        if (action === 'jump') {
+                            this.handleSwipeUp();
+                        } else {
+                            this.handleAction(action);
+                        }
+                    });
+                });
+            }
+            
+            handleSwipeUp() {
+                const now = Date.now();
+                const timeSinceLastSwipe = now - this.lastSwipeTime;
+                
+                // Check for double swipe (front flip)
+                if (this.lastSwipeDirection === 'up' && 
+                    timeSinceLastSwipe < this.config.doubleSwipeWindow &&
+                    this.flipCooldownTime <= 0 &&
+                    (this.playerY <= 0.1 || now - this.lastGroundTime < this.config.coyoteTime)) {
+                    
+                    this.handleAction('flip');
+                } else {
+                    this.handleAction('jump');
+                }
+                
+                this.lastSwipeTime = now;
+                this.lastSwipeDirection = 'up';
+            }
+            
+            handleAction(action) {
+                if (!this.isPlaying) return;
+                
+                switch (action) {
+                    case 'left':
+                        if (this.currentLane > 0) {
+                            this.currentLane--;
+                            this.playSound('swipe');
+                            this.vibrate([10]);
+                        }
+                        break;
+                        
+                    case 'right':
+                        if (this.currentLane < 2) {
+                            this.currentLane++;
+                            this.playSound('swipe');
+                            this.vibrate([10]);
+                        }
+                        break;
+                        
+                    case 'jump':
+                        if (this.playerY <= 0.1) {
+                            this.isJumping = true;
+                            this.playerVelocityY = this.config.jumpHeight;
+                            this.lastGroundTime = Date.now();
+                            this.playSound('jump');
+                            this.vibrate([15]);
+                        }
+                        break;
+                        
+                    case 'flip':
+                        if (this.flipCooldownTime <= 0) {
+                            this.isFlipping = true;
+                            this.isJumping = true;
+                            this.playerVelocityY = this.config.flipHeight;
+                            this.flipCooldownTime = this.config.flipCooldown;
+                            this.playSound('flip');
+                            this.vibrate([20, 50, 20]);
+                            this.showToast('Front flip! +25 bodů');
+                            this.score += 25;
+                        }
+                        break;
+                        
+                    case 'slide':
+                        if (!this.isSliding && this.playerY <= 0.1) {
+                            this.isSliding = true;
+                            setTimeout(() => {
+                                this.isSliding = false;
+                            }, this.config.slideTime);
+                            this.playSound('slide');
+                            this.vibrate([25]);
+                        }
+                        break;
+                }
+            }
+            
+            handleKeyboard(e) {
+                if (!this.isPlaying) return;
+                
+                switch (e.key) {
+                    case 'ArrowLeft':
+                    case 'a':
+                    case 'A':
+                        e.preventDefault();
+                        this.handleAction('left');
+                        break;
+                        
+                    case 'ArrowRight':
+                    case 'd':
+                    case 'D':
+                        e.preventDefault();
+                        this.handleAction('right');
+                        break;
+                        
+                    case 'ArrowUp':
+                    case 'w':
+                    case 'W':
+                    case ' ':
+                        e.preventDefault();
+                        this.handleSwipeUp();
+                        break;
+                        
+                    case 'ArrowDown':
+                    case 's':
+                    case 'S':
+                        e.preventDefault();
+                        this.handleAction('slide');
+                        break;
+                        
+                    case 'Escape':
+                        e.preventDefault();
+                        this.pauseGame();
+                        break;
+                }
+            }
+            
+            async initAudio() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.soundEnabled = true;
+                } catch (e) {
+                    console.warn('Audio not supported');
+                    this.soundEnabled = false;
+                }
+            }
+            
+            playSound(type) {
+                if (!this.soundEnabled || !this.settings.sound || !this.audioContext) return;
+                
+                const frequencies = {
+                    jump: 440,
+                    flip: 880,
+                    slide: 220,
+                    swipe: 330,
+                    powerup: 550,
+                    collision: 150
+                };
+                
+                const freq = frequencies[type] || 440;
+                const oscillator = this.audioContext.createOscillator();
+                const gain = this.audioContext.createGain();
+                
+                oscillator.connect(gain);
+                gain.connect(this.audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(freq, this.audioContext.currentTime);
+                gain.gain.setValueAtTime(0.1, this.audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.2);
+                
+                oscillator.start();
+                oscillator.stop(this.audioContext.currentTime + 0.2);
+            }
+            
+            vibrate(pattern) {
+                if ('vibrate' in navigator && this.settings.haptics) {
+                    navigator.vibrate(pattern);
+                }
+            }
+            
+            showToast(message) {
+                this.toast.textContent = message;
+                this.toast.classList.add('show');
+                setTimeout(() => {
+                    this.toast.classList.remove('show');
+                }, 3000);
+            }
+            
+            startGame() {
+                if (!window.THREE) {
+                    this.showToast('Načítání 3D enginu...');
+                    setTimeout(() => this.startGame(), 1000);
+                    return;
+                }
+                
+                this.gameState = 'playing';
+                this.isPlaying = true;
+                document.body.classList.add('game-playing');
+                
+                this.resetGameState();
+                this.init3D();
+                this.gameLoop();
+                
+                if (this.settings.controls === 'buttons') {
+                    this.touchControls.classList.add('visible');
+                }
+                
+                this.showToast('Začínáš utíkat! Pozor na fízly!');
+            }
+            
+            resetGameState() {
+                this.currentLane = 1;
+                this.currentSpeed = this.config.startSpeed;
+                this.score = 0;
+                this.distance = 0;
+                this.lives = 3;
+                this.isJumping = false;
+                this.isSliding = false;
+                this.isFlipping = false;
+                this.flipCooldownTime = 0;
+                this.playerY = 0;
+                this.playerVelocityY = 0;
+                this.obstacles = [];
+                this.powerUps = [];
+                this.activePowerUps = [];
+            }
+            
+            init3D() {
+                if (this.renderer) {
+                    this.renderer.dispose();
+                }
+                
+                // Scene setup
+                this.scene = new THREE.Scene();
+                this.scene.fog = new THREE.Fog(0x1a1a2e, 50, 200);
+                
+                // Camera setup
+                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                this.camera.position.set(0, 4, 8);
+                this.camera.lookAt(0, 0, -10);
+                
+                // Renderer setup
+                this.renderer = new THREE.WebGLRenderer({ 
+                    canvas: this.canvas, 
+                    antialias: !this.lowPowerMode,
+                    alpha: false
+                });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setClearColor(0x1a1a2e);
+                this.renderer.shadowMap.enabled = !this.lowPowerMode;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                
+                // Lighting
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+                this.scene.add(ambientLight);
+                
+                const directionalLight = new THREE.DirectionalLight(0x64ffda, 0.8);
+                directionalLight.position.set(10, 20, 10);
+                directionalLight.castShadow = !this.lowPowerMode;
+                if (!this.lowPowerMode) {
+                    directionalLight.shadow.mapSize.width = 2048;
+                    directionalLight.shadow.mapSize.height = 2048;
+                }
+                this.scene.add(directionalLight);
+                
+                // Create player (Pedro)
+                this.createPlayer();
+                
+                // Create ground
+                this.createGround();
+                
+                // Create background
+                this.createBackground();
+            }
+            
+            createPlayer() {
+                const playerGroup = new THREE.Group();
+                
+                // Body
+                const bodyGeometry = new THREE.CapsuleGeometry(0.3, 1.2, 4, 8);
+                const bodyMaterial = new THREE.MeshLambertMaterial({ color: 0x8b4513 });
+                const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+                body.position.y = 0.6;
+                playerGroup.add(body);
+                
+                // Head
+                const headGeometry = new THREE.SphereGeometry(0.25, 8, 8);
+                const headMaterial = new THREE.MeshLambertMaterial({ color: 0xffdbac });
+                const head = new THREE.Mesh(headGeometry, headMaterial);
+                head.position.y = 1.5;
+                playerGroup.add(head);
+                
+                // Snapback (cap)
+                const capGeometry = new THREE.CylinderGeometry(0.3, 0.3, 0.1, 8);
+                const capMaterial = new THREE.MeshLambertMaterial({ color: 0x2a2a2a });
+                const cap = new THREE.Mesh(capGeometry, capMaterial);
+                cap.position.y = 1.65;
+                cap.rotation.x = Math.PI * 0.1;
+                playerGroup.add(cap);
+                
+                // Backpack
+                const backpackGeometry = new THREE.BoxGeometry(0.4, 0.5, 0.2);
+                const backpackMaterial = new THREE.MeshLambertMaterial({ color: 0x333333 });
+                const backpack = new THREE.Mesh(backpackGeometry, backpackMaterial);
+                backpack.position.set(0, 0.8, -0.4);
+                playerGroup.add(backpack);
+                
+                playerGroup.position.set(this.getLanePosition(1), 0, 0);
+                this.player = playerGroup;
+                this.scene.add(this.player);
+            }
+            
+            createGround() {
+                const groundGeometry = new THREE.PlaneGeometry(20, 200);
+                const groundMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0x2a2a2a,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+                ground.rotation.x = -Math.PI / 2;
+                ground.position.z = -50;
+                ground.receiveShadow = !this.lowPowerMode;
+                this.scene.add(ground);
+                
+                // Lane markers
+                for (let i = 0; i < 3; i++) {
+                    const lineGeometry = new THREE.BoxGeometry(0.1, 0.1, 200);
+                    const lineMaterial = new THREE.MeshLambertMaterial({ color: 0x64ffda });
+                    const line = new THREE.Mesh(lineGeometry, lineMaterial);
+                    line.position.set(this.getLanePosition(i), 0.05, -50);
+                    this.scene.add(line);
+                }
+            }
+            
+            createBackground() {
+                // Prague skyline silhouettes
+                const buildingGeometry = new THREE.BoxGeometry(2, Math.random() * 10 + 5, 1);
+                const buildingMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0x1a1a2e,
+                    transparent: true,
+                    opacity: 0.6
+                });
+                
+                for (let i = 0; i < 20; i++) {
+                    const building = new THREE.Mesh(buildingGeometry, buildingMaterial);
+                    building.position.set(
+                        (Math.random() - 0.5) * 40,
+                        building.geometry.parameters.height / 2,
+                        -20 - Math.random() * 30
+                    );
+                    this.scene.add(building);
+                }
+            }
+            
+            getLanePosition(lane) {
+                return (lane - 1) * 3; // -3, 0, 3
+            }
+            
+            gameLoop() {
+                if (!this.isPlaying) return;
+                
+                const now = Date.now();
+                const deltaTime = Math.min((now - (this.lastFrameTime || now)) / 1000, 1/30);
+                this.lastFrameTime = now;
+                
+                this.updateGame(deltaTime);
+                this.updateHUD();
+                this.updateDebug();
+                
+                if (this.renderer && this.scene && this.camera) {
+                    this.renderer.render(this.scene, this.camera);
+                }
+                
+                this.updateFPS();
+                
+                requestAnimationFrame(() => this.gameLoop());
+            }
+            
+            updateGame(deltaTime) {
+                if (!this.player) return;
+                
+                // Update speed
+                this.currentSpeed = Math.min(
+                    this.config.maxSpeed, 
+                    this.config.startSpeed + this.distance * this.config.speedIncrease
+                );
+                
+                // Update distance
+                this.distance += this.currentSpeed * deltaTime;
+                this.score = Math.floor(this.distance);
+                
+                // Update player physics
+                this.updatePlayerPhysics(deltaTime);
+                
+                // Update player position
+                this.updatePlayerPosition(deltaTime);
+                
+                // Update camera
+                this.updateCamera();
+                
+                // Update cooldowns
+                if (this.flipCooldownTime > 0) {
+                    this.flipCooldownTime -= deltaTime * 1000;
+                }
+                
+                // Spawn obstacles and power-ups
+                this.spawnGameObjects();
+                
+                // Update game objects
+                this.updateObstacles(deltaTime);
+                this.updatePowerUps(deltaTime);
+                
+                // Check collisions
+                this.checkCollisions();
+                
+                // Update active power-ups
+                this.updateActivePowerUps(deltaTime);
+            }
+            
+            updatePlayerPhysics(deltaTime) {
+                if (this.isJumping || this.playerY > 0) {
+                    this.playerVelocityY -= this.config.gravityStrength * deltaTime;
+                    this.playerY += this.playerVelocityY * deltaTime;
+                    
+                    if (this.playerY <= 0) {
+                        this.playerY = 0;
+                        this.playerVelocityY = 0;
+                        this.isJumping = false;
+                        this.isFlipping = false;
+                    }
+                } else {
+                    this.lastGroundTime = Date.now();
+                }
+            }
+            
+            updatePlayerPosition(deltaTime) {
+                // Smooth lane transition
+                const targetX = this.getLanePosition(this.currentLane);
+                const currentX = this.player.position.x;
+                const laneSpeed = 10;
+                
+                if (Math.abs(targetX - currentX) > 0.1) {
+                    this.player.position.x += (targetX - currentX) * laneSpeed * deltaTime;
+                } else {
+                    this.player.position.x = targetX;
+                }
+                
+                // Update Y position
+                this.player.position.y = this.playerY;
+                
+                // Sliding animation
+                if (this.isSliding) {
+                    this.player.scale.y = 0.5;
+                } else {
+                    this.player.scale.y = 1;
+                }
+                
+                // Flip animation
+                if (this.isFlipping) {
+                    this.player.rotation.x = (this.playerVelocityY / this.config.flipHeight) * Math.PI * 2;
+                } else {
+                    this.player.rotation.x = 0;
+                }
+            }
+            
+            updateCamera() {
+                // Follow player smoothly
+                const targetCameraX = this.player.position.x * 0.3;
+                this.camera.position.x += (targetCameraX - this.camera.position.x) * 0.05;
+            }
+            
+            spawnGameObjects() {
+                // Spawn obstacles
+                if (Math.random() < 0.02 * (1 + this.currentSpeed / 20)) {
+                    this.spawnObstacle();
+                }
+                
+                // Spawn power-ups
+                if (Math.random() < 0.005) {
+                    this.spawnPowerUp();
+                }
+            }
+            
+            spawnObstacle() {
+                const types = ['cop', 'car', 'barrier', 'pigeon', 'needle'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                const lane = Math.floor(Math.random() * 3);
+                
+                let geometry, material, color;
+                
+                switch (type) {
+                    case 'cop':
+                        geometry = new THREE.CapsuleGeometry(0.3, 1.5, 4, 8);
+                        color = 0x000080;
+                        break;
+                    case 'car':
+                        geometry = new THREE.BoxGeometry(4, 1.5, 2);
+                        color = 0x0066cc;
+                        break;
+                    case 'barrier':
+                        geometry = new THREE.BoxGeometry(2, 1, 0.5);
+                        color = 0xff6600;
+                        break;
+                    case 'pigeon':
+                        geometry = new THREE.SphereGeometry(0.3, 6, 6);
+                        color = 0x666666;
+                        break;
+                    case 'needle':
+                        geometry = new THREE.CylinderGeometry(0.05, 0.05, 0.3, 6);
+                        color = 0xff0000;
+                        break;
+                }
+                
+                material = new THREE.MeshLambertMaterial({ color });
+                const obstacle = new THREE.Mesh(geometry, material);
+                
+                obstacle.position.set(
+                    this.getLanePosition(lane),
+                    type === 'needle' ? 0.15 : (geometry.parameters.height || 1) / 2,
+                    -30
+                );
+                
+                obstacle.userData = { type, lane, speed: this.currentSpeed };
+                
+                this.obstacles.push(obstacle);
+                this.scene.add(obstacle);
+            }
+            
+            spawnPowerUp() {
+                const types = ['speed', 'invisible', 'life'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                const lane = Math.floor(Math.random() * 3);
+                
+                let color;
+                switch (type) {
+                    case 'speed': color = 0x00ff00; break;
+                    case 'invisible': color = 0x9999ff; break;
+                    case 'life': color = 0xff0099; break;
+                }
+                
+                const geometry = new THREE.SphereGeometry(0.4, 8, 8);
+                const material = new THREE.MeshLambertMaterial({ 
+                    color, 
+                    transparent: true, 
+                    opacity: 0.8 
+                });
+                const powerUp = new THREE.Mesh(geometry, material);
+                
+                powerUp.position.set(this.getLanePosition(lane), 1, -30);
+                powerUp.userData = { type, lane };
+                
+                this.powerUps.push(powerUp);
+                this.scene.add(powerUp);
+            }
+            
+            updateObstacles(deltaTime) {
+                this.obstacles.forEach((obstacle, index) => {
+                    obstacle.position.z += this.currentSpeed * deltaTime;
+                    
+                    // Animation based on type
+                    if (obstacle.userData.type === 'pigeon') {
+                        obstacle.position.x += Math.sin(Date.now() * 0.01) * 0.5 * deltaTime;
+                        obstacle.position.y += Math.cos(Date.now() * 0.015) * 0.3 * deltaTime;
+                    }
+                    
+                    // Remove if behind player
+                    if (obstacle.position.z > 10) {
+                        this.scene.remove(obstacle);
+                        this.obstacles.splice(index, 1);
+                    }
+                });
+            }
+            
+            updatePowerUps(deltaTime) {
+                this.powerUps.forEach((powerUp, index) => {
+                    powerUp.position.z += this.currentSpeed * deltaTime;
+                    powerUp.rotation.y += deltaTime * 2;
+                    powerUp.position.y = 1 + Math.sin(Date.now() * 0.005) * 0.2;
+                    
+                    // Remove if behind player
+                    if (powerUp.position.z > 10) {
+                        this.scene.remove(powerUp);
+                        this.powerUps.splice(index, 1);
+                    }
+                });
+            }
+            
+            checkCollisions() {
+                const playerBox = new THREE.Box3().setFromObject(this.player);
+                
+                // Check obstacle collisions
+                this.obstacles.forEach((obstacle, index) => {
+                    const obstacleBox = new THREE.Box3().setFromObject(obstacle);
+                    
+                    if (playerBox.intersectsBox(obstacleBox)) {
+                        this.handleCollision(obstacle);
+                        this.scene.remove(obstacle);
+                        this.obstacles.splice(index, 1);
+                    }
+                });
+                
+                // Check power-up collections
+                this.powerUps.forEach((powerUp, index) => {
+                    const powerUpBox = new THREE.Box3().setFromObject(powerUp);
+                    
+                    if (playerBox.intersectsBox(powerUpBox)) {
+                        this.collectPowerUp(powerUp);
+                        this.scene.remove(powerUp);
+                        this.powerUps.splice(index, 1);
+                    }
+                });
+            }
+            
+            handleCollision(obstacle) {
+                const type = obstacle.userData.type;
+                
+                // Check if player can avoid collision
+                let canAvoid = false;
+                
+                switch (type) {
+                    case 'needle':
+                        canAvoid = this.isJumping || this.isFlipping;
+                        break;
+                    case 'barrier':
+                        canAvoid = this.isSliding || this.isJumping;
+                        break;
+                    default:
+                        canAvoid = false;
+                }
+                
+                // Check invulnerability
+                const isInvulnerable = this.activePowerUps.some(pu => pu.type === 'invisible');
+                
+                if (!canAvoid && !isInvulnerable) {
+                    this.lives--;
+                    this.playSound('collision');
+                    this.vibrate([100, 50, 100]);
+                    
+                    const messages = this.voiceLines[this.settings.spice];
+                    const message = messages[Math.floor(Math.random() * messages.length)];
+                    this.showToast(message);
+                    
+                    if (this.lives <= 0) {
+                        this.gameOver();
+                    }
+                } else if (canAvoid) {
+                    this.score += this.isFlipping ? 25 : 10;
+                    this.showToast(this.isFlipping ? 'Skvělý flip! +25' : 'Pěkně! +10');
+                }
+            }
+            
+            collectPowerUp(powerUp) {
+                const type = powerUp.userData.type;
+                
+                this.playSound('powerup');
+                this.vibrate([30]);
+                
+                switch (type) {
+                    case 'speed':
+                        this.activatePowerUp('speed', 3000);
+                        this.showToast('Rychlý šleh! Přidáváš!');
+                        break;
+                    case 'invisible':
+                        this.activatePowerUp('invisible', 4000);
+                        this.showToast('Neviditelnost! Jsi v bezpečí!');
+                        break;
+                    case 'life':
+                        this.lives++;
+                        this.showToast('Extra cévko! +1 život');
+                        break;
+                }
+            }
+            
+            activatePowerUp(type, duration) {
+                // Remove existing power-up of same type
+                this.activePowerUps = this.activePowerUps.filter(pu => pu.type !== type);
+                
+                this.activePowerUps.push({
+                    type,
+                    duration,
+                    maxDuration: duration,
+                    startTime: Date.now()
+                });
+                
+                this.updatePowerUpHUD();
+            }
+            
+            updateActivePowerUps(deltaTime) {
+                this.activePowerUps.forEach((powerUp, index) => {
+                    powerUp.duration -= deltaTime * 1000;
+                    
+                    if (powerUp.duration <= 0) {
+                        this.activePowerUps.splice(index, 1);
+                        this.updatePowerUpHUD();
+                    }
+                });
+            }
+            
+            updatePowerUpHUD() {
+                if (this.activePowerUps.length > 0) {
+                    const powerUp = this.activePowerUps[0];
+                    const icons = { speed: '⚡', invisible: '👻', life: '❤️' };
+                    
+                    document.getElementById('powerup-icon').textContent = icons[powerUp.type];
+                    document.getElementById('powerup-icon').style.backgroundColor = 
+                        powerUp.type === 'speed' ? '#00ff00' :
+                        powerUp.type === 'invisible' ? '#9999ff' : '#ff0099';
+                    
+                    const progress = (powerUp.duration / powerUp.maxDuration) * 100;
+                    document.getElementById('powerup-progress').style.width = progress + '%';
+                    
+                    this.hudPowerup.style.display = 'flex';
+                } else {
+                    this.hudPowerup.style.display = 'none';
+                }
+            }
+            
+            updateHUD() {
+                this.hudScore.textContent = `${Math.floor(this.distance)} m`;
+            }
+            
+            updateDebug() {
+                if (this.debugOverlay.style.display === 'block') {
+                    document.getElementById('debug-fps').textContent = this.fps;
+                    document.getElementById('debug-speed').textContent = this.currentSpeed.toFixed(1);
+                    document.getElementById('debug-lane').textContent = this.currentLane;
+                    document.getElementById('debug-state').textContent = this.gameState;
+                }
+            }
+            
+            updateFPS() {
+                this.frameCount++;
+                const now = Date.now();
+                
+                if (now - this.lastFpsUpdate >= 1000) {
+                    this.fps = Math.round((this.frameCount * 1000) / (now - this.lastFpsUpdate));
+                    this.frameCount = 0;
+                    this.lastFpsUpdate = now;
+                    
+                    // Enable low power mode if FPS drops
+                    if (this.fps < 30 && !this.lowPowerMode) {
+                        this.lowPowerMode = true;
+                        this.showToast('Low power mód aktivován');
+                        
+                        if (this.renderer) {
+                            this.renderer.shadowMap.enabled = false;
+                            this.renderer.antialias = false;
+                        }
+                    }
+                }
+            }
+            
+            gameOver() {
+                this.isPlaying = false;
+                this.gameState = 'gameover';
+                
+                // Update best score
+                if (this.score > this.gameData.highScore) {
+                    this.gameData.highScore = this.score;
+                    this.showToast('Nový rekord!');
+                }
+                
+                // Show game over screen
+                document.getElementById('final-score').textContent = this.score;
+                document.getElementById('final-distance').textContent = `${Math.floor(this.distance)} m`;
+                document.getElementById('best-score').textContent = this.gameData.highScore;
+                
+                const messages = [
+                    'Chytli tě fízlové!',
+                    'Konec útěku!',
+                    'Příště to bude lepší!',
+                    'Zkus to znovu!'
+                ];
+                document.getElementById('game-over-message').textContent = 
+                    messages[Math.floor(Math.random() * messages.length)];
+                
+                this.gameOverScreen.style.display = 'flex';
+                
+                this.saveGameData();
+            }
+            
+            restartGame() {
+                this.gameOverScreen.style.display = 'none';
+                this.startGame();
+            }
+            
+            backToMenu() {
+                this.isPlaying = false;
+                this.gameState = 'menu';
+                document.body.classList.remove('game-playing');
+                this.gameOverScreen.style.display = 'none';
+                this.touchControls.classList.remove('visible');
+                
+                if (this.renderer) {
+                    this.renderer.dispose();
+                    this.renderer = null;
+                }
+            }
+            
+            pauseGame() {
+                if (this.isPlaying) {
+                    this.isPaused = !this.isPaused;
+                    this.showToast(this.isPaused ? 'Pauza' : 'Pokračování');
+                }
+            }
+            
+            showSettings() {
+                this.settingsPanel.style.display = 'flex';
+                this.loadSettingsUI();
+            }
+            
+            hideSettings() {
+                this.settingsPanel.style.display = 'none';
+            }
+            
+            loadSettingsUI() {
+                document.getElementById('setting-theme').value = this.settings.theme;
+                document.getElementById('setting-spice').value = this.settings.spice;
+                document.getElementById('setting-sound').value = this.settings.sound.toString();
+                document.getElementById('setting-controls').value = this.settings.controls;
+            }
+            
+            saveSettings() {
+                this.settings.theme = document.getElementById('setting-theme').value;
+                this.settings.spice = document.getElementById('setting-spice').value;
+                this.settings.sound = document.getElementById('setting-sound').value === 'true';
+                this.settings.controls = document.getElementById('setting-controls').value;
+                
+                this.applyTheme();
+                this.saveGameData();
+                this.hideSettings();
+                this.showToast('Nastavení uloženo');
+            }
+            
+            applyTheme() {
+                const root = document.documentElement;
+                
+                if (this.settings.theme === 'day') {
+                    root.style.setProperty('--color-bg-primary', 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%)');
+                } else if (this.settings.theme === 'night') {
+                    root.style.setProperty('--color-bg-primary', 'linear-gradient(135deg, #0c0c1d 0%, #111827 50%, #1f2937 100%)');
+                } else {
+                    // Auto - use system preference
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (prefersDark) {
+                        root.style.setProperty('--color-bg-primary', 'linear-gradient(135deg, #0c0c1d 0%, #111827 50%, #1f2937 100%)');
+                    } else {
+                        root.style.setProperty('--color-bg-primary', 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%)');
+                    }
+                }
+            }
+            
+            handleVisibilityChange() {
+                if (document.hidden && this.isPlaying) {
+                    this.saveGameData();
+                }
+            }
+            
+            handleResize() {
+                if (this.renderer && this.camera) {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                }
+            }
+            
+            checkDebugMode() {
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('debug') === '1') {
+                    this.debugOverlay.style.display = 'block';
+                }
+            }
+            
+            loadGameData() {
+                const defaultData = {
+                    highScore: 0,
+                    bestSpeed: 0,
+                    leaderboard: [],
+                    achievements: [],
+                    settings: {
+                        sound: true,
+                        music: true,
+                        haptics: true,
+                        theme: 'auto',
+                        spice: 'mild',
+                        controls: 'touch'
+                    }
+                };
+                
+                try {
+                    const saved = localStorage.getItem('fofr-pedro-data');
+                    return saved ? { ...defaultData, ...JSON.parse(saved) } : defaultData;
+                } catch (e) {
+                    return defaultData;
+                }
+            }
+            
+            saveGameData() {
+                try {
+                    localStorage.setItem('fofr-pedro-data', JSON.stringify(this.gameData));
+                } catch (e) {
+                    console.warn('Could not save game data');
+                }
+            }
+            
+            async registerServiceWorker() {
+                if ('serviceWorker' in navigator) {
+                    try {
+                        // Create service worker dynamically
+                        const swCode = `
+                            const CACHE_NAME = 'fofr-pedro-v1';
+                            const urlsToCache = [
+                                './',
+                                'https://cdnjs.cloudflare.com/ajax/libs/three.js/0.179.1/three.module.min.js'
+                            ];
+                            
+                            self.addEventListener('install', (event) => {
+                                event.waitUntil(
+                                    caches.open(CACHE_NAME)
+                                        .then((cache) => cache.addAll(urlsToCache))
+                                );
+                            });
+                            
+                            self.addEventListener('fetch', (event) => {
+                                event.respondWith(
+                                    caches.match(event.request)
+                                        .then((response) => response || fetch(event.request))
+                                );
+                            });
+                        `;
+                        
+                        const blob = new Blob([swCode], { type: 'application/javascript' });
+                        const swURL = URL.createObjectURL(blob);
+                        
+                        await navigator.serviceWorker.register(swURL);
+                        console.log('Service Worker registered');
+                    } catch (error) {
+                        console.log('Service Worker registration failed:', error);
+                    }
+                }
+            }
+        }
+        
+        // Initialize game when page loads
+        window.addEventListener('load', () => {
+            window.fofrPedroGame = new FofrPedroGame();
+        });
+        
+        // Handle reduced motion preference
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        mediaQuery.addListener((e) => {
+            if (e.matches) {
+                document.body.style.setProperty('--animation-duration', '0.01s');
+            }
+        });
+    </script>
 </body>
 </html>
